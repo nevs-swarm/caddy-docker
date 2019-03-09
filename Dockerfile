@@ -40,5 +40,5 @@ RUN apk add --no-cache curl tini
 COPY --from=builder /caddy /usr/bin/caddy
 COPY /Caddyfile /etc/Caddyfile
 
-ENTRYPOINT [ "/sbin/tini", "--", "/usr/bin/caddy" ]
-CMD [ "-conf", "/etc/Caddyfile", "--log", "stdout", "--agree=$ACME_AGREE" ]
+ENTRYPOINT ["/sbin/tini", "--", "/usr/bin/caddy", "-conf", "/etc/Caddyfile"]
+CMD ["-log", "stdout"]

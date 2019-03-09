@@ -13,7 +13,10 @@ Feel free to fork this repository and adjust them to your needs!
 docker run -d -p 2015:2015 nevsnode/caddy
 ```
 
-Make sure to preserve Let's Encrypt certificates and mount your own Caddyfile (at `/etc/Caddyfile`):
+##### Relevant paths:
+* `/etc/Caddyfile`
+
+Make sure to preserve Let's Encrypt certificates and mount your own Caddyfile:
 ```
 docker run -d \
     -v Caddyfile:/etc/Caddyfile \
@@ -23,6 +26,15 @@ docker run -d \
     nevsnode/caddy
 ```
 
-You'll most likely need to agree to [Let's Encrypt Subscriber Agreement](https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf). This is configurable with the `ACME_AGREE` environment variable: `ACME_AGREE=true`.
+You'll most likely need to agree to [Let's Encrypt Subscriber Agreement](https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf). This can be achieved by passing the flag `-agree`. For example:
+```sh
+docker run -d -p 2015:2015 nevsnode/caddy -log stdout -agree
+```
+Or in docker-compose.yml:
+```yml
+# [...]
+    command: ["-log", "stdout", "-agree"]
+# [...]
+```
 
 Just to have it mentioned: [Telemetry](https://caddyserver.com/docs/telemetry) is enabled by default. It can be disabled using the flag `-disabled-metrics`
