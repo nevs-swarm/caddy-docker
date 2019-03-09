@@ -1,0 +1,5 @@
+:2015
+browse
+root /srv
+log stdout
+errors stdout
