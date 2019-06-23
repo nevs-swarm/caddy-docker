@@ -1,36 +1,21 @@
 # builder image
 FROM golang:alpine AS builder
 
-ARG version="0.11.5"
-ARG plugins="\
-github.com/caddyserver/dnsproviders/cloudflare \
-github.com/captncraig/caddy-realip \
-"
+ARG version="1.0.0"
 
-RUN apk add --no-cache git
+RUN apk add git
 
-# get caddy source
-RUN git clone https://github.com/mholt/caddy -b "v${version}" $GOPATH/src/github.com/mholt/caddy
-WORKDIR $GOPATH/src/github.com/mholt/caddy
-RUN git checkout -b "v${version}"
+COPY caddy.go /caddy-docker/caddy.go
+WORKDIR /caddy-docker
 
-# add plugins
-WORKDIR $GOPATH/src/github.com/mholt/caddy/caddy/caddymain
-RUN for plugin in $(echo "${plugins}"); do \
-      go get -v $plugin; \
-      awk "{sub(/^import \\(/, \"import \\(\n\t_ \\\"$plugin\\\"\"); print \$0}" run.go > run.go.tmp; \
-      rm -f run.go; \
-      mv run.go.tmp run.go; \
-    done
+ENV GO111MODULE=on
+RUN go mod init caddy
+RUN go get github.com/mholt/caddy@v${version}
 
-# get build helper
-RUN git clone https://github.com/caddyserver/builds $GOPATH/src/github.com/caddyserver/builds
+# FIXME temporary workaround
+RUN echo "replace github.com/h2non/gock => gopkg.in/h2non/gock.v1 v1.0.14" >> go.mod
 
-# finally build caddy
-WORKDIR $GOPATH/src/github.com/mholt/caddy/caddy
-RUN go run build.go
-RUN mv caddy /
-
+RUN go build -o /caddy
 
 # final image
 FROM alpine
@@ -39,6 +24,8 @@ RUN apk add --no-cache curl tini
 
 COPY --from=builder /caddy /usr/bin/caddy
 COPY /Caddyfile /etc/Caddyfile
+
+EXPOSE 80 443 2015
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/bin/caddy", "-conf", "/etc/Caddyfile"]
 CMD ["-log", "stdout"]

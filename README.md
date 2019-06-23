@@ -37,4 +37,5 @@ Or in docker-compose.yml:
 # [...]
 ```
 
-Just to have it mentioned: [Telemetry](https://caddyserver.com/docs/telemetry) is enabled by default. It can be disabled using the flag `-disabled-metrics`
+Just to have it mentioned: [Telemetry](https://caddyserver.com/docs/telemetry) is enabled by default. It can be disabled using the flag `-disabled-metrics`.
+Alternatively, you can also fork this repository and adjust `caddy.go` to disable it entirely.
