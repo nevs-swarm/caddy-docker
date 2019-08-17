@@ -1,6 +1,6 @@
 caddy-docker
 ===
-A Docker image for [Caddy](https://caddyserver.com/) ([github.com/mholt/caddy](https://github.com/mholt/caddy)). There already exists some almost official image: [github.com/abiosoft/caddy-docker](https://github.com/abiosoft/caddy-docker). I strongly recommend to look at these great projects first and read through the [Caddy Documentation](https://caddyserver.com/docs).
+A Docker image for [Caddy](https://caddyserver.com/) ([github.com/caddyserver/caddy](https://github.com/caddyserver/caddy)). There already exists some almost official image: [github.com/abiosoft/caddy-docker](https://github.com/abiosoft/caddy-docker). I strongly recommend to look at these great projects first and read through the [Caddy Documentation](https://caddyserver.com/docs).
 
 I prefer being able to easily customize the included plugins, that are built on the Docker Hub. Hence creating my own Dockerfile. Currently these plugins are included:
 * realip
